@@ -13,17 +13,23 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    credentials: true,
+    // origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: true,
+    credentials: true
   })
 );
+
 app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
+
+app.options("*", cors());
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
