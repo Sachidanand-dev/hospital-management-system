@@ -12,17 +12,18 @@ const appointmentSchema = new mongoose.Schema(
       ref: "Patient",
       required: true,
     },
+    queueNumber: {
+      type: Number,
+    },
     date: {
       type: Date,
       required: true,
     },
     startTime: {
       type: String,
-      required: true,
     },
     endTime: {
       type: String,
-      required: true,
     },
     status: {
       type: String,
