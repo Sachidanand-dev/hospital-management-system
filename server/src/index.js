@@ -1,14 +1,17 @@
 import dotenv from "dotenv";
 dotenv.config();
+
 import app from "./app.js";
 import { connectDB } from "./config/db.js";
-import { logError, logInfo } from "./utils/logger.js";
+import { logInfo, logError } from "./utils/logger.js";
 
 connectDB();
 
-app.listen(process.env.PORT || 5000, () => {
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
   try {
-    logInfo(`🚀 Server running on port ${process.env.PORT}`);
+    logInfo(`🚀 Server running on http://localhost:${PORT}`);
   } catch (error) {
     logError(error);
   }

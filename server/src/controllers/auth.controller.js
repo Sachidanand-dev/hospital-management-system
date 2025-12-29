@@ -55,17 +55,11 @@ export const login = async (req, res, next) => {
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
-    // // ✅ FIXED COOKIE SETTINGS (macOS SAFE)
-    // res.cookie("refreshToken", refreshToken, {
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === "production",
-    //   sameSite: "lax", // 🔥 FIX
-    //   maxAge: 7 * 24 * 60 * 60 * 1000,
-    // });
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false, // localhost
+      secure: false, // localhost only
       sameSite: "lax", // ❌ NOT strict
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.json({

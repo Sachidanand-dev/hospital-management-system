@@ -12,12 +12,18 @@ import appointmentRoutes from "./routes/appointment.routes.js";
 const app = express();
 
 /* =====================================================
-   🔥 ABSOLUTE FIRST MIDDLEWARE (NO EXCEPTIONS)
+   🔥 CORS + OPTIONS — MUST BE FIRST
 ===================================================== */
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+];
+
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
-  if (origin === "http://localhost:5173") {
+  if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
 
@@ -31,7 +37,7 @@ app.use((req, res, next) => {
     "GET, POST, PUT, PATCH, DELETE, OPTIONS"
   );
 
-  // 🔥 macOS NEEDS THIS
+  // 🔥 Required for macOS preflight
   if (req.method === "OPTIONS") {
     return res.sendStatus(204);
   }
@@ -40,7 +46,7 @@ app.use((req, res, next) => {
 });
 
 /* =====================================================
-   PARSERS
+   BODY PARSERS
 ===================================================== */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -62,6 +68,8 @@ app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
   })
 );
 
@@ -75,11 +83,13 @@ app.use("/api/patients", patientRoutes);
 app.use("/api/appointments", appointmentRoutes);
 
 /* =====================================================
-   ERROR HANDLER
+   GLOBAL ERROR HANDLER
 ===================================================== */
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ message: "Server error" });
+  console.error("❌ Error:", err.message);
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error",
+  });
 });
 
 export default app;
