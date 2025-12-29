@@ -41,7 +41,7 @@ app.use(
 );
 
 // 🔥 REQUIRED FOR macOS preflight
-app.options("*", cors());
+// app.options("*", cors());
 
 /* ======================================================
    2️⃣ BODY & COOKIE PARSERS
