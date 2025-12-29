@@ -21,6 +21,10 @@ const AppointmentBooking = ({ onSuccess }) => {
     doctorId: "",
     date: "",
     reason: "",
+    gender: "",
+    dateOfBirth: "",
+    contactNumber: "",
+    address: "",
   });
 
   useEffect(() => {
@@ -57,6 +61,10 @@ const AppointmentBooking = ({ onSuccess }) => {
         doctorId: "",
         date: "",
         reason: "",
+        gender: "",
+        dateOfBirth: "",
+        contactNumber: "",
+        address: "",
       });
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -126,7 +134,7 @@ const AppointmentBooking = ({ onSuccess }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Date
@@ -141,6 +149,74 @@ const AppointmentBooking = ({ onSuccess }) => {
                 className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
               />
               <Calendar className="absolute left-3 top-2.5 text-gray-400 h-5 w-5 pointer-events-none" />
+            </div>
+          </div>
+        </div>
+
+        {/* Patient Details Section */}
+        <div className="bg-gray-50 p-4 rounded-xl space-y-4">
+          <h4 className="font-semibold text-gray-800">Patient Details</h4>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                name="dateOfBirth"
+                value={formData.dateOfBirth}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Gender
+              </label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none bg-white"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Contact Number
+              </label>
+              <input
+                type="tel"
+                name="contactNumber"
+                value={formData.contactNumber}
+                onChange={handleInputChange}
+                placeholder="1234567890"
+                required
+                className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Address
+              </label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                placeholder="City, State"
+                className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+              />
             </div>
           </div>
         </div>

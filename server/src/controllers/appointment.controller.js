@@ -4,7 +4,15 @@ import Patient from "../models/Patient.model.js";
 import User from "../models/User.model.js";
 
 export const bookAppointment = async (req, res) => {
-  const { doctorId, date, reason } = req.body;
+  const {
+    doctorId,
+    date,
+    reason,
+    gender,
+    dateOfBirth,
+    contactNumber,
+    address,
+  } = req.body;
   const userId = req.user._id;
 
   try {
@@ -43,14 +51,33 @@ export const bookAppointment = async (req, res) => {
 
     // 3. Resolve Patient
     let patient = await Patient.findOne({ user: userId });
+
+    // Create or Update Patient Details
+    const patientData = {
+      user: userId,
+      ...(gender && { gender }),
+      ...(dateOfBirth && { dateOfBirth }),
+      ...(contactNumber && { contactNumber }),
+      ...(address && { address }),
+    };
+
     if (!patient) {
       console.log("Patient profile missing. Auto-creating...");
+      // Ensure defaults if not provided
       patient = await Patient.create({
-        user: userId,
-        gender: "Other",
         bloodGroup: "O+", // Default
+        gender: "Other",
         contactNumber: "0000000000",
+        ...patientData,
       });
+    } else {
+      console.log("Updating existing Patient profile...");
+      // Update existing profile with new info if provided
+      if (gender) patient.gender = gender;
+      if (dateOfBirth) patient.dateOfBirth = dateOfBirth;
+      if (contactNumber) patient.contactNumber = contactNumber;
+      if (address) patient.address = address;
+      await patient.save();
     }
 
     // 4. Create Appointment
@@ -109,8 +136,14 @@ export const getMyAppointments = async (req, res) => {
         .json({ message: "User not linked to any profile" });
 
     const appointments = await Appointment.find(query)
-      .populate("doctor")
-      .populate("patient")
+      .populate({
+        path: "doctor",
+        populate: { path: "user", select: "name email" },
+      })
+      .populate({
+        path: "patient",
+        populate: { path: "user", select: "name email" },
+      })
       .sort({ date: 1 });
 
     res.json(appointments);
