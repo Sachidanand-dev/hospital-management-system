@@ -4,7 +4,7 @@ import { Users, UserPlus, Settings } from "lucide-react";
 const AdminDashboard = () => {
   return (
     <Layout>
-      <div className="space-y-6">
+      <div className="space-y-6 px-6">
         <header>
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           <p className="text-gray-600 mt-2">

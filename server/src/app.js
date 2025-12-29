@@ -28,7 +28,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-app.options("*", cors());
 
 
 app.use("/api/auth", authRoutes);
